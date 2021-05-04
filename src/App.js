@@ -4,7 +4,9 @@ import Header from './components/layout/Header'
 import './App.css';
 import Todos from './components/Todos';
 import AddTodo from './components/AddTodo';
+import About from './components/pages/About';
 import {v4 as uuid} from 'uuid';
+import axios from "axios";
 
 //function App() {
 
@@ -13,24 +15,14 @@ import {v4 as uuid} from 'uuid';
 
     //React.state = {
         state = {
-        todos: [
-            {
-                id: uuid(),
-                title: 'task 1',
-                completed: false
-            },
-            {
-                id: uuid(),
-                title: '2 task',
-                completed: true
-            },
-            {
-                id: uuid(),
-                title: 'last task',
-                completed: false
-            },
-        ]
+            todos: []
+        }
+
+    componentDidMount() {
+        axios.get('https://jsonplaceholder.typicode.com/todos?_limit=10')
+            .then(res => this.setState({ todos: res.data }) )
     }
+
 
     markComplete = (id) => {
         this.setState({ todos: this.state.todos.map(todo => {
@@ -42,18 +34,30 @@ import {v4 as uuid} from 'uuid';
     }
 
     delTodo = (id) => {
-        this.setState({ todos: [...this.state.todos.filter(todo => todo.id !== id) ]
-        }) }
+
+        axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
+            .then(res => this.setState({ todos: [...this.state.todos.filter(todo => todo.id !== id) ]}));
+
+        /*this.setState({ todos: [...this.state.todos.filter(todo => todo.id !== id) ]
+        })*/ }
 
     addTodo = (title) => {
         //console.log(title)
 
-        const newTodo = {
+        /*const newTodo = {
             id: uuid(),
             title,
             completed: false
         }
         this.setState({ todos: [...this.state.todos, newTodo ]});
+        */
+
+        axios.post('https://jsonplaceholder.typicode.com/todos', {
+            title,
+            completed: false
+        })
+            .then(res => this.setState({ todos: [...this.state.todos, res.data ]}));
+        
          
     }
     
@@ -66,11 +70,16 @@ import {v4 as uuid} from 'uuid';
     <div className="App">
         <Header />
 
-        
+        <Route exact path="/" render={props => (
+            <React.Fragment>
+                <AddTodo addTodo={this.addTodo} />
+                <Todos todos={ this.state.todos } markComplete={this.markComplete} delTodo={this.delTodo} />
+            </React.Fragment>
+        )} />
 
-        <AddTodo addTodo={this.addTodo} />
+        <Route path="/about" component={About} />
+
         
-      <Todos todos={ this.state.todos } markComplete={this.markComplete} delTodo={this.delTodo} />
     </div>
     </Router>
   );

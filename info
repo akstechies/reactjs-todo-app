@@ -1,0 +1,46 @@
+npx create-react-app .
+
+till 15:45
+
+deleted index.css
+
+create components/Todos.js
+
+for running - npm start
+
+till 28:10
+
+rce -> snippet
+
+TIll 01:09:00
+Checkbox
+
+npm install uuid
+
+npm i react-router-dom
+
+TIll 01:20:00
+
+npm i axios
+    https://jsonplaceholder.typicode.com/todos
+
+/*todos: [
+            {
+                id: uuid(),
+                title: 'task 1',
+                completed: false
+            },
+            {
+                id: uuid(),
+                title: '2 task',
+                completed: true
+            },
+            {
+                id: uuid(),
+                title: 'last task',
+                completed: false
+            },
+        ]*/
+
+try-> for deploy
+npm run build
